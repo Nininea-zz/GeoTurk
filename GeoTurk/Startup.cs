@@ -22,6 +22,7 @@ namespace GeoTurk
             if (migrator.GetPendingMigrations().Any())
             {
                 migrator.Update();
+   
             }
 
             ConfigureAuth(app);

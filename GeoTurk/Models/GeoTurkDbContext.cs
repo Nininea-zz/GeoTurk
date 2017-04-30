@@ -18,7 +18,7 @@ namespace GeoTurk.Models
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TaskChoise> TaskChoises { get; set; }
 
-        public GeoTurkDbContext() : base(typeof(GeoTurkDbContext).Name)
+        public GeoTurkDbContext() : base("GeoTurkConnectionString")
         {
         }
 
@@ -59,6 +59,18 @@ namespace GeoTurk.Models
                 .HasMany(h => h.TaskChoises).WithRequired(t => t.HIT).HasForeignKey(t => t.HITID).WillCascadeOnDelete(true);
             modelBuilder.Entity<HIT>()
                 .HasMany(h => h.Tags).WithMany(t => t.HITs).Map(map => map.MapLeftKey("HITID").MapRightKey("TagID"));
+
+            modelBuilder.Entity<TaskChoise>()
+                .Property(t => t.TaskChoiseID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<TaskChoise>()
+            .HasKey(t => t.TaskChoiseID);
+
+            modelBuilder.Entity<Tag>()
+              .Property(t => t.TagID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Tag>()
+             .HasKey(t => t.TagID);
+            modelBuilder.Entity<Tag>()
+                 .HasMany(t => t.HITs).WithMany(h => h.Tags).Map(map => map.MapLeftKey("TagID").MapRightKey("HITID"));
         }
 
         public override int SaveChanges()
