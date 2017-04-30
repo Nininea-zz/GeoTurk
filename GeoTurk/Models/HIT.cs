@@ -30,6 +30,9 @@ namespace GeoTurk.Models
         //სავარაუდო პასუხები
         public virtual ICollection<TaskChoise> TaskChoises { get; set; }
 
-        public virtual ICollection<Tag> Tags { get; set; }
+        public string Tags { get; set; }
+
+        public int CreatorID { get; set; }
+        public virtual User Creator { get; set; }
     }
 }

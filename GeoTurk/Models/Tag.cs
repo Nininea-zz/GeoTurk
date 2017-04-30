@@ -9,7 +9,6 @@ namespace GeoTurk.Models
     {
         public int TagID { get; set; }
         public string Title { get; set; }
-
-        public virtual ICollection<HIT> HITs { get; set; }
+        
     }
 }

@@ -10,6 +10,6 @@ namespace GeoTurk.Enums
         FreeText = 1,
         FileUpload = 2,
         ChoiseText = 3,
-        ChoiseImage = 3
+        ChoiseImage = 4
     }
 }

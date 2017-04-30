@@ -34,12 +34,7 @@ namespace GeoTurk.Models
 
         public string LastName { get; set; }
 
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, int> manager)
-        {
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-
-            return userIdentity;
-        }
+        public virtual ICollection<HIT> HITs { get; set; }
 
         [NotMapped]
         public string Password { get; set; }
@@ -47,6 +42,12 @@ namespace GeoTurk.Models
         [NotMapped]
         [Display(Name="Confirm Password")]
         public string ConfirmPassword { get; set; }
-        
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, int> manager)
+        {
+            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+
+            return userIdentity;
+        }
     }
 }

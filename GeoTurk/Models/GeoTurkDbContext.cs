@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using System.Web;
 using GeoTurk.Helpers;
 using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure.Annotations;
 
 namespace GeoTurk.Models
 {
@@ -58,7 +59,9 @@ namespace GeoTurk.Models
             modelBuilder.Entity<HIT>()
                 .HasMany(h => h.TaskChoises).WithRequired(t => t.HIT).HasForeignKey(t => t.HITID).WillCascadeOnDelete(true);
             modelBuilder.Entity<HIT>()
-                .HasMany(h => h.Tags).WithMany(t => t.HITs).Map(map => map.MapLeftKey("HITID").MapRightKey("TagID"));
+                .Property(h => h.Tags).IsOptional().IsMaxLength();
+            modelBuilder.Entity<HIT>()
+                .HasRequired(h => h.Creator).WithMany(u => u.HITs).HasForeignKey(h => h.CreatorID).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<TaskChoise>()
                 .Property(t => t.TaskChoiseID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
@@ -68,9 +71,7 @@ namespace GeoTurk.Models
             modelBuilder.Entity<Tag>()
               .Property(t => t.TagID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<Tag>()
-             .HasKey(t => t.TagID);
-            modelBuilder.Entity<Tag>()
-                 .HasMany(t => t.HITs).WithMany(h => h.Tags).Map(map => map.MapLeftKey("TagID").MapRightKey("HITID"));
+             .Property(t => t.Title).IsRequired().HasMaxLength(50);
         }
 
         public override int SaveChanges()

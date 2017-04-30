@@ -20,6 +20,21 @@ namespace GeoTurk.Helpers
             return (((MemberExpression)(exp.Body)).Member).Name;
         }
 
+        public static string ToGeorgianDate(this DateTime date, CultureInfo culture = null, string format = "dd/MM/yyyy")
+        {
+            if (culture == null)
+                culture = CultureInfo.InvariantCulture;
+
+            return date.ToString(format, culture);
+        }
+        public static string ToGeorgianDateTime(this DateTime date, CultureInfo culture = null, string format = "dd/MM/yyyy HH:mm:ss")
+        {
+            if (culture == null)
+                culture = CultureInfo.InvariantCulture;
+
+            return date.ToString(format, culture);
+        }
+
         public static string ToJson(object obj)
         {
             var settings = new JsonSerializerSettings()
