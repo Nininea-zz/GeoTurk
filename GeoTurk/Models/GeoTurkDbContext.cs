@@ -18,6 +18,9 @@ namespace GeoTurk.Models
         public DbSet<HIT> HITs { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TaskChoise> TaskChoises { get; set; }
+        public DbSet<WorkerHIT> WorkerHITs { get; set; }
+
+
 
         public GeoTurkDbContext() : base("GeoTurkConnectionString")
         {
@@ -37,6 +40,9 @@ namespace GeoTurk.Models
             modelBuilder.Entity<UserClaim>().ToTable("UserClaims");
             modelBuilder.Entity<UserLogin>().ToTable("UserLogins");
             modelBuilder.Entity<Role>().ToTable("Roles");
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Balance).IsRequired().HasPrecision(10, 2);
 
             modelBuilder.Entity<HIT>()
                 .Property(h => h.HITID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
@@ -61,7 +67,11 @@ namespace GeoTurk.Models
             modelBuilder.Entity<HIT>()
                 .Property(h => h.Tags).IsOptional().IsMaxLength();
             modelBuilder.Entity<HIT>()
-                .HasRequired(h => h.Creator).WithMany(u => u.HITs).HasForeignKey(h => h.CreatorID).WillCascadeOnDelete(false);
+                .HasRequired(h => h.Creator).WithMany(u => u.OwnHITs).HasForeignKey(h => h.CreatorID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<HIT>()
+                .Property(h => h.Cost).IsRequired().HasPrecision(10, 2);
+            modelBuilder.Entity<HIT>()
+                .Property(h => h.WorkersCount).IsRequired();
 
             modelBuilder.Entity<TaskChoise>()
                 .Property(t => t.TaskChoiseID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
@@ -72,6 +82,13 @@ namespace GeoTurk.Models
               .Property(t => t.TagID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<Tag>()
              .Property(t => t.Title).IsRequired().HasMaxLength(50);
+
+            modelBuilder.Entity<WorkerHIT>()
+                .HasKey(wh => new { wh.WorkerID, wh.HITID });
+            modelBuilder.Entity<WorkerHIT>()
+                .HasRequired(wh => wh.Worker).WithMany(w => w.WorkerHITs).HasForeignKey(wh => wh.WorkerID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<WorkerHIT>()
+                .HasRequired(wh => wh.HIT).WithMany(h => h.WorkerHITs).HasForeignKey(wh => wh.HITID).WillCascadeOnDelete(false);
         }
 
         public override int SaveChanges()

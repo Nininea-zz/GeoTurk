@@ -60,5 +60,25 @@ namespace GeoTurk.Helpers
                 return sw.GetStringBuilder().ToString();
             }
         }
+
+        public static IEnumerable<SelectListItem> GetEnumSelectList<TEnum>(bool prependNull = true, Expression expression = null)
+        {
+            if (prependNull)
+                yield return new SelectListItem
+                {
+                    Text = "",
+                    Value = ""
+                };
+
+            var values = Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
+            foreach (var value in values)
+            {
+                yield return new SelectListItem
+                {
+                    Text = value.ToString(),
+                    Value = value.ToString()
+                };
+            }
+        }
     }
 }

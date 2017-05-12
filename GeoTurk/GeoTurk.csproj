@@ -209,6 +209,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="Controllers\RequesterController.cs" />
     <Compile Include="Enums\ChoiseType.cs" />
     <Compile Include="Enums\AnswerType.cs" />
@@ -228,6 +230,14 @@
     <Compile Include="Migrations\201704301633349_init-database-003.Designer.cs">
       <DependentUpon>201704301633349_init-database-003.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705121610179_init-database-004.cs" />
+    <Compile Include="Migrations\201705121610179_init-database-004.Designer.cs">
+      <DependentUpon>201705121610179_init-database-004.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705121859346_init-database-005.cs" />
+    <Compile Include="Migrations\201705121859346_init-database-005.Designer.cs">
+      <DependentUpon>201705121859346_init-database-005.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GeoTurkDbContext.cs" />
@@ -235,6 +245,7 @@
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\TaskChoise.cs" />
     <Compile Include="Models\HIT.cs" />
+    <Compile Include="Models\WorkerHITs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -303,7 +314,15 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\ProfileInfo.cshtml" />
     <Content Include="Views\Account\SetPassword.cshtml" />
+    <Content Include="Views\Requester\Hits.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Requester\Index.cshtml" />
+    <Content Include="Views\Requester\My.cshtml" />
+    <Content Include="Views\Requester\Add.cshtml" />
+    <Content Include="Views\Worker\Find.cshtml" />
+    <Content Include="Views\Worker\Hits.cshtml" />
+    <Content Include="Views\Worker\Index.cshtml" />
+    <Content Include="Views\Worker\My.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -328,6 +347,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704301633349_init-database-003.resx">
       <DependentUpon>201704301633349_init-database-003.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705121610179_init-database-004.resx">
+      <DependentUpon>201705121610179_init-database-004.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705121859346_init-database-005.resx">
+      <DependentUpon>201705121859346_init-database-005.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

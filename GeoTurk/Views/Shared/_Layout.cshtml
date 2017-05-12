@@ -14,7 +14,7 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-   
+
     @RenderSection("scripts", required: false)
 
 
@@ -29,6 +29,27 @@
                 <span class="navbar-brand">Geo Turk</span>
             </div>
             <div class="navbar-collapse collapse">
+                @if (Request.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown @(ViewBag.SelectedProfile == "Requester" ? "selected" : "")">
+                            <a class="menu-header" href="@Url.Action("Index", "Requester")"> მომთხოვნი <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="@Url.Action("Add", "Requester")">HIT-ის დამატება</a></li>
+                                <li><a href="@Url.Action("Hits", "Requester")">ჩემი HIT-ები</a></li>
+                                <li><a href="@Url.Action("My", "Requester")">ჩემი გვერდი</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown @(ViewBag.SelectedProfile == "Worker" ? "selected" : "")">
+                            <a class="menu-header" href="@Url.Action("Index", "Worker")"> მომუშავე <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="@Url.Action("Find", "Worker")">დავალების ძებნა</a></li>
+                                <li><a href="@Url.Action("Hits", "Worker")">ჩემი HIT-ები</a></li>
+                                <li><a href="@Url.Action("My", "Worker")">ჩემი გვერდი</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                }
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

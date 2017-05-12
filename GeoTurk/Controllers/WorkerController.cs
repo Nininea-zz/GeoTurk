@@ -1,6 +1,4 @@
-﻿using GeoTurk.Enums;
-using GeoTurk.Helpers;
-using GeoTurk.Models;
+﻿using GeoTurk.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Web.Mvc;
 
 namespace GeoTurk.Controllers
 {
-    public class RequesterController : Controller
+    public class WorkerController : Controller
     {
         private GeoTurkDbContext _db;
         public GeoTurkDbContext DB
@@ -32,18 +30,14 @@ namespace GeoTurk.Controllers
         public ActionResult Hits()
         {
             var currentUserID = User.Identity.GetUserId<int>();
-            var hitsList = DB.HITs.Where(h => h.CreatorID == currentUserID).ToList();
+            var hitsList = DB.WorkerHITs.Where(h => h.WorkerID == currentUserID).Select(wh => wh.HIT).ToList();
 
             return View(hitsList);
         }
 
-        public ActionResult Add()
+        public ActionResult Find()
         {
-            var model = new HIT();
-            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<AnswerType>(false);
-            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
-
-            return View(model);
+            return View();
         }
 
         public ActionResult My()

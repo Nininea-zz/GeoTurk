@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -34,7 +35,9 @@ namespace GeoTurk.Models
 
         public string LastName { get; set; }
 
-        public virtual ICollection<HIT> HITs { get; set; }
+        public virtual ICollection<HIT> OwnHITs { get; set; }
+
+        public virtual ICollection<WorkerHIT> WorkerHITs { get; set; }
 
         [NotMapped]
         public string Password { get; set; }
@@ -42,6 +45,9 @@ namespace GeoTurk.Models
         [NotMapped]
         [Display(Name="Confirm Password")]
         public string ConfirmPassword { get; set; }
+
+        [DefaultValue(0)]
+        public decimal Balance { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, int> manager)
         {

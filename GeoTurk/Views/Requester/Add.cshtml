@@ -1,0 +1,141 @@
+﻿@using GeoTurk.Models;
+
+@model HIT
+
+@{
+    ViewBag.Title = "HIT-ის დამატება";
+}
+
+<h3>@ViewBag.Title</h3>
+<br />
+<div class="container">
+    @Html.HiddenFor(model => model.HITID)
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Title, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.DurationInMinutes, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.DurationInMinutes, new { @class = "form-control", type = "number", min = "1", max = "9999.99", step = "0.01", value = "1" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Instuction, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextAreaFor(model => model.Instuction, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.ExpireDate, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.ExpireDate, new { @class = "form-control", type = "date" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Description, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.RelatedFilePath, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.RelatedFilePath, new { @class = "form-control", placeholder = "მიუთითეთ ფაილის მისამართი" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.AnswerType, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.AnswerType, new SelectList(Model.AnswerTypesSelectList, "Value", "Text"), new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.ChoiseType, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ChoiseType, new SelectList(Model.ChoiseTypesSelectList, "Value", "Text"), new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.WorkersCount, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.WorkersCount, new { @class = "form-control", type = "number", min = "1", max = "1000000", value = "1" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Cost, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Cost, new { @class = "form-control", type = "number", min = "0", max = "99999999.99", step = "0.01", value = "1" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Tags, new { @class = "control-label pull-md-right" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Tags, new { @class = "form-control", placeholder = "tag1, tag2, tag3..." })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-6">
+                <input type="submit" value="დავალები შექმნა" class="btn btn-primary pull-md-right" />
+            </div>
+        </div>
+    </div>
+</div>

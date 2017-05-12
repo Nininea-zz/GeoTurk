@@ -80,9 +80,9 @@ textarea {
     }
 
 @media (min-width: 1300px) {
-  .modal-xlg {
-    width: 1200px;
-  }
+    .modal-xlg {
+        width: 1200px;
+    }
 }
 
 .file-upload {
@@ -94,37 +94,182 @@ textarea {
     background-color: #9d1419;
 }
 
-.Secretariat.selected a {
-    color: white!important;
-}
+    .Secretariat.selected a {
+        color: white !important;
+    }
 
 .MemberAssociation.selected {
     background-color: #672281;
 }
 
-.MemberAssociation.selected a {
-    color: white!important;
-}
+    .MemberAssociation.selected a {
+        color: white !important;
+    }
 
 .CertificationBody.selected {
     background-color: #F9641C;
 }
 
-.CertificationBody.selected a {
-    color: white!important;
-}
+    .CertificationBody.selected a {
+        color: white !important;
+    }
 
 .CVMB.selected {
     background-color: #2e3192;
 }
 
-.CVMB.selected a {
-    color: white!important;
-}
+    .CVMB.selected a {
+        color: white !important;
+    }
 
 .select2-container .select2-selection--single .select2-selection__rendered {
-    padding-right: 10px!important;
+    padding-right: 10px !important;
 }
+
 .select2-container--bootstrap .select2-selection__clear {
-    margin-right: 0!important;
+    margin-right: 0 !important;
+}
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu > a:after {
+        border-color: transparent transparent transparent #333;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        content: " ";
+        display: block;
+        float: right;
+        height: 0;
+        margin-right: -10px;
+        margin-top: 5px;
+        width: 0;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #555;
+    }
+
+.dropdown-menu > li > a:hover, .dropdown-menu > .active > a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+
+    .navbar-nav {
+        display: inline;
+    }
+
+    .navbar-default .navbar-brand {
+        display: inline;
+    }
+
+    .navbar-default .navbar-toggle .icon-bar {
+        background-color: #fff;
+    }
+
+    .navbar-default .navbar-nav .dropdown-menu > li > a {
+        color: red;
+        background-color: #ccc;
+        border-radius: 4px;
+        margin-top: 2px;
+    }
+
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #333;
+    }
+
+        .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+        .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+            background-color: #ccc;
+        }
+
+    .navbar-nav .open .dropdown-menu {
+        border-bottom: 1px solid white;
+        border-radius: 0;
+    }
+
+    .dropdown-menu {
+        padding-left: 10px;
+    }
+
+        .dropdown-menu .dropdown-menu {
+            padding-left: 20px;
+        }
+
+            .dropdown-menu .dropdown-menu .dropdown-menu {
+                padding-left: 30px;
+            }
+
+    li.dropdown.open {
+        border: 0px solid red;
+    }
+}
+
+@media (min-width: 768px) {
+    ul.nav li:hover > ul.dropdown-menu {
+        display: block;
+    }
+
+    #navbar {
+        text-align: center;
+    }
+}
+
+@media (min-width: 768px) {
+    .pull-sm-left {
+        float: left !important;
+    }
+
+    .pull-sm-right {
+        float: right !important;
+    }
+
+    .pull-sm-none {
+        float: none !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .pull-md-left {
+        float: left !important;
+    }
+
+    .pull-md-right {
+        float: right !important;
+    }
+
+    .pull-md-none {
+        float: none !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .pull-lg-left {
+        float: left !important;
+    }
+
+    .pull-lg-right {
+        float: right !important;
+    }
+
+    .pull-lg-none {
+        float: none !important;
+    }
+}
+
+.pull-none {
+    float: none !important;
 }
