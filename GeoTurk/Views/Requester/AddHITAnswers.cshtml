@@ -1,0 +1,121 @@
+﻿@using GeoTurk.Models;
+@using GeoTurk.Enums;
+@using Newtonsoft.Json;
+
+@model HIT
+
+@{
+    ViewBag.Title = "HIT-ის დამატება";
+    var hit = JsonConvert.SerializeObject(Model);
+}
+
+<h3>@ViewBag.Title</h3>
+<br />
+<div class="row">
+    <div class="col-md-9">
+        <input id="add-answer" type="button" value="სავარაუდო პასუხის დამატება" class="btn pull-md-right" />
+    </div>
+</div>
+<br />
+
+    <div class="container" id="hit-possible-answers" data-answer-type="@Model.AnswerType.ToString()">
+    </div>
+
+<br />
+<div class="row">
+    <div class="col-md-9">
+        <input id="save-hit" type="submit" value="შენახვა" class="btn btn-primary pull-md-right" />
+    </div>
+</div>
+
+<div id="hit-answer-template" style="display: none;">
+    <div class="row">
+        <div class="form-group possible-answer">
+
+            <div class="col-xs-3">
+                @if (Model.ChoiseType == ChoiseType.Single)
+                {
+                    <input type="radio" disabled readonly class="pull-right" style="cursor: default;" />
+                }
+                else
+                {
+                    <input type="checkbox" disabled readonly class="pull-right" style="cursor: default;" />
+                }
+            </div>
+            <div class="col-xs-5">
+                @{
+                    var placeholder = "";
+                    if (Model.AnswerType == AnswerType.ChoiseText)
+                    {
+                        placeholder = "ჩაწერეთ სავარაუდო პასუხი";
+                    }
+                    else
+                    if (Model.AnswerType == AnswerType.ChoiseImage)
+                    {
+                        placeholder = "ჩაწერეთ სავარაუდო სურათის მისამართი";
+                    }
+                }
+                <input class="possible-answer-text form-control" placeholder="@placeholder" style="max-width: 460px!important;" />
+            </div>
+            <div class="col-xs-1">
+                <i class="close-btn fa fa-close" style="cursor: pointer;"></i>
+            </div>
+        </div>
+        <br />
+    </div>
+</div>
+
+<script>
+    function AddItem() {
+        var $template = $("#hit-answer-template");
+        $("#hit-possible-answers").append($($template.html()));
+
+        showHideCloseBtn();
+
+    }
+    AddItem();
+    AddItem();
+    AddItem();
+
+    function showHideCloseBtn() {
+        var rows = $("#hit-possible-answers .close-btn");
+        if (rows.length <= 1) {
+            rows.hide();
+        }
+        else {
+            rows.show();
+        }
+    }
+
+    $(function () {
+        $("#add-answer").on("click", function () {
+            AddItem();
+        });
+
+        $(document).on("click", ".close-btn", function (event) {
+            var $row = $(event.target).closest(".row");
+            $row.remove();
+
+            showHideCloseBtn();
+        });
+
+        $("#save-hit").on("click", function () {
+            var possibleAnswers = [];
+            $("#hit-possible-answers .possible-answer-text").each(function (index, element) {
+                possibleAnswers.push(element.value);
+            });
+
+            $.ajax({
+                url: "@Html.Raw(Url.Action("SaveHit", "Requester"))",
+                type: "post",
+                data: {
+                    hit: JSON.parse('@Html.Raw(hit)'),
+                    possibleAnswers
+                },
+                success: function () {
+                    window.location.replace("@Html.Raw(Url.Action("SaveSuccess", "Requester"))");
+                }
+            });
+        });
+    });
+</script>

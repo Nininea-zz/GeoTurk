@@ -28,6 +28,7 @@
             <th>
                 ტაგები
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +40,29 @@
                 <td>@hit.DurationInMinutes წუთი</td>
                 <td>@hit.ExpireDate.ToGeorgianDate()</td>
                 <td>@hit.Tags</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu-@hit.HITID" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu-@hit.HITID">
+                            @if (hit.PublishDate.HasValue)
+                            {
+                                <li><a href="#">Unpublish</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="#">Publish</a></li>
+                            }
+                            <li role="separator" class="divider"></li>
+                            <li><a href="@Html.Raw(Url.Action("EditHIT", "Requester", new { hitID = hit.HITID }))">Edit</a></li>
+                            @if (hit.WorkerHITs == null || hit.WorkerHITs.Count == 0)
+                            {
+                                <li><a href="@Html.Raw(Url.Action("DeleteHIT", "Requester", new { hitID = hit.HITID }))">Delete</a></li>
+                            }
+                        </ul>
+                    </div>
+                </td>
             </tr>
         }
     </tbody>

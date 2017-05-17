@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "დავალების დამატება დასრულდა";
+}
+
+<h3 class="text-success">@ViewBag.Title</h3>
+
+<ul>
+    <li><a href="@Html.Raw(Url.Action("Add", "Requester"))">ახალი დავალების დამატება</a></li>
+    <li><a href="@Html.Raw(Url.Action("Hits", "Requester"))">ჩემი დავალებები</a></li>
+</ul>

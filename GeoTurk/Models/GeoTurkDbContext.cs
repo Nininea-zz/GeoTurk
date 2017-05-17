@@ -55,9 +55,11 @@ namespace GeoTurk.Models
             modelBuilder.Entity<HIT>()
                 .Property(h => h.Instuction).IsRequired().IsMaxLength();
             modelBuilder.Entity<HIT>()
-                .Property(h => h.RelatedFilePath).IsOptional();
+                .Property(h => h.RelatedFilePath).IsOptional().IsMaxLength();
             modelBuilder.Entity<HIT>()
                 .Property(h => h.ExpireDate).IsRequired().HasPrecision(3);
+            modelBuilder.Entity<HIT>()
+                .Property(h => h.PublishDate).IsOptional();
             modelBuilder.Entity<HIT>()
                 .Property(h => h.AnswerType).IsRequired();
             modelBuilder.Entity<HIT>()
@@ -89,6 +91,8 @@ namespace GeoTurk.Models
                 .HasRequired(wh => wh.Worker).WithMany(w => w.WorkerHITs).HasForeignKey(wh => wh.WorkerID).WillCascadeOnDelete(false);
             modelBuilder.Entity<WorkerHIT>()
                 .HasRequired(wh => wh.HIT).WithMany(h => h.WorkerHITs).HasForeignKey(wh => wh.HITID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<WorkerHIT>()
+                .Property(wh => wh.AssignDate).IsRequired();
         }
 
         public override int SaveChanges()

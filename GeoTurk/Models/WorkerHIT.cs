@@ -12,5 +12,8 @@ namespace GeoTurk.Models
 
         public int HITID { get; set; }
         public virtual HIT HIT { get; set; }
+
+        public DateTime AssignDate { get; set; }
+
     }
 }

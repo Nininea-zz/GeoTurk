@@ -4,6 +4,7 @@ using Microsoft.Owin;
 using Owin;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.Linq;
 
 [assembly: OwinStartupAttribute(typeof(GeoTurk.Startup))]
@@ -13,6 +14,9 @@ namespace GeoTurk
     {
         public void Configuration(IAppBuilder app)
         {
+
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<GeoTurkDbContext, Configuration>());
 

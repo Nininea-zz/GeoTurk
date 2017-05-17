@@ -11,7 +11,9 @@ namespace GeoTurk
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-ui.js"));
+                        "~/Scripts/jquery-ui.js",
+                        "~/Scripts/toastr.js",
+                        "~/Scripts/App.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -30,6 +32,7 @@ namespace GeoTurk
                       "~/Content/font-awesome.css",
                       //"~/Content/simple-sidebar.css",
                       "~/Content/jquery-ui-1.10.0.custom.min.css",
+                      "~/Content/toastr.css",
                       "~/Content/site.css"));
         }
     }

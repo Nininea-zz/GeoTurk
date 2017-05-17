@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace GeoTurk.Controllers
 {
+    [Authorize]
     public class WorkerController : Controller
     {
         private GeoTurkDbContext _db;
