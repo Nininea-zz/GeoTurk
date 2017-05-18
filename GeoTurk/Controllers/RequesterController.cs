@@ -165,5 +165,31 @@ namespace GeoTurk.Controllers
         {
             return View();
         }
+
+        public ActionResult PublishHIT(int hitID)
+        {
+            var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
+
+            if (hit != null)
+            {
+                hit.PublishDate = DateTime.Now;
+                DB.SaveChanges();
+            }
+
+            return RedirectToAction("Hits");
+        }
+
+        public ActionResult UnpublishHIT(int hitID)
+        {
+            var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
+
+            if (hit != null)
+            {
+                hit.PublishDate = null;
+                DB.SaveChanges();
+            }
+
+            return RedirectToAction("Hits");
+        }
     }
 }

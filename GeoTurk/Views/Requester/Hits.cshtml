@@ -46,14 +46,12 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu-@hit.HITID">
-                            @if (hit.PublishDate.HasValue)
-                            {
-                                <li><a href="#">Unpublish</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="#">Publish</a></li>
-                            }
+                            <li style="display: @(hit.PublishDate.HasValue ? "initial" : "none;");">
+                                <a href="@Html.Raw(Url.Action("UnpublishHIT", "Requester", new { hitID = hit.HITID }))">Unpublish</a>
+                            </li>
+                            <li style="display: @(hit.PublishDate.HasValue ? "none" : "initial");">
+                                <a href="@Html.Raw(Url.Action("PublishHIT", "Requester", new { hitID = hit.HITID }))">Publish</a>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li><a href="@Html.Raw(Url.Action("EditHIT", "Requester", new { hitID = hit.HITID }))">Edit</a></li>
                             @if (hit.WorkerHITs == null || hit.WorkerHITs.Count == 0)
