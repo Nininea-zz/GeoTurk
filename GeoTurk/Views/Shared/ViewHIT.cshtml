@@ -1,0 +1,121 @@
+﻿@model GeoTurk.Models.HIT
+
+@{
+    ViewBag.Title = "დავალება";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<style>
+        .row-details {
+            margin-top: 0.5em;
+        }
+    </style>*@
+<div style="text-align:center;">
+    <h4><b>@Model.Title</b></h4>
+</div>
+<div class="container" style="margin: 15px;">
+    <div class="row">
+        <div class="col-md-7 col-md-offset-1">
+            @*<div class="row row-details">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, new { @class = "col-md-4" })
+                        <div class="col-md-8 value">
+                            @Html.DisplayFor(model => model.Title)
+                        </div>
+                    </div>
+                </div>*@
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DurationInMinutes, "ხანგრძლივობა", new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.DurationInMinutes) წუთი
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Instuction, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.Instuction)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ExpireDate, new { @class = "control-label col-md-4" })
+                    <div class="col-md-4 value">
+                        @Html.DisplayFor(model => model.ExpireDate)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.Description)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            @if (!string.IsNullOrEmpty(Model.RelatedFilePath))
+            {
+                <div class="row row-details">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RelatedFilePath, new { @class = "col-md-4" })
+                        <div class="col-md-8 value">
+                            <a href="@Model.RelatedFilePath" target="_blank">იხილეთ დაკავშრებული ფაილი</a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AnswerType, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.AnswerType)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ChoiseType, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.ChoiseType)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WorkersCount, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.WorkersCount)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Cost, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.Cost)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Tags, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        @Html.DisplayFor(model => model.Tags)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

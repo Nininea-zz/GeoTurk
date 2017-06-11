@@ -38,12 +38,23 @@ namespace GeoTurk.Controllers
 
         public ActionResult Find()
         {
-            return View();
+            var hits = DB.HITs.Where(h => h.PublishDate.HasValue).OrderByDescending(x => x.PublishDate).ToList();
+
+            return View(hits);
         }
 
         public ActionResult My()
         {
             return View();
+        }
+
+        public ActionResult ViewHit(int hitID)
+        {
+            var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
+            if (hit == null)
+                return RedirectToAction("Hits");
+
+            return View(hit);
         }
     }
 }

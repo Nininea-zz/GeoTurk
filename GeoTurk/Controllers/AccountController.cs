@@ -333,7 +333,7 @@ namespace GeoTurk.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

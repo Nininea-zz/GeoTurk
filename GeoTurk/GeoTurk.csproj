@@ -345,6 +345,7 @@
     <Content Include="Views\Requester\AddHITAnswers.cshtml" />
     <Content Include="Views\Requester\EditHIT.cshtml" />
     <Content Include="Views\Requester\HitAddCompleted.cshtml" />
+    <Content Include="Views\Shared\ViewHIT.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
