@@ -1,0 +1,15 @@
+﻿@model GeoTurk.Models.HIT
+
+@{
+    ViewBag.Title = $"დავალების შესრულება - { Model.Title }";
+}
+
+<h3>@Model.Title</h3>
+<div class="row row-details">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Instuction)
+        <div>
+            @Html.DisplayFor(model => model.Instuction)
+        </div>
+    </div>
+</div>

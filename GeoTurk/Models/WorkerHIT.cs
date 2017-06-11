@@ -15,5 +15,9 @@ namespace GeoTurk.Models
 
         public DateTime AssignDate { get; set; }
 
+        public DateTime? CompleteDate { get; set; }
+
+        public bool IsPaid { get; set; }
+
     }
 }

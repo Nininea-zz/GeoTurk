@@ -50,10 +50,55 @@ namespace GeoTurk.Controllers
 
         public ActionResult ViewHit(int hitID)
         {
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
             if (hit == null)
+            {
                 return RedirectToAction("Hits");
+            }
 
+            var userHit = hit.WorkerHITs.FirstOrDefault(x => x.WorkerID == userID);
+            if (userHit != null)
+            {
+                ViewBag.IsCompleted = userHit.CompleteDate.HasValue;
+            }
+
+            return View(hit);
+        }
+
+        public ActionResult Work(int hitID)
+        {
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
+            if (hit == null)
+            {
+                return RedirectToAction("Find", "Worker");
+            }
+
+            var userHit = DB.WorkerHITs.FirstOrDefault(x => x.WorkerID == userID && x.HITID == hitID);
+            if (userHit == null)
+            {
+                userHit = new WorkerHIT
+                {
+                    HITID = hitID,
+                    WorkerID = userID,
+                    AssignDate = DateTime.Now
+                };
+
+                hit.WorkerHITs.Add(userHit);
+                DB.SaveChanges();
+            }
+            
             return View(hit);
         }
     }

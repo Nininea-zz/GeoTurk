@@ -246,6 +246,10 @@
     <Compile Include="Migrations\201705141214545_init-database-007.Designer.cs">
       <DependentUpon>201705141214545_init-database-007.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706111603162_init-database-008.cs" />
+    <Compile Include="Migrations\201706111603162_init-database-008.Designer.cs">
+      <DependentUpon>201706111603162_init-database-008.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GeoTurkDbContext.cs" />
@@ -346,6 +350,7 @@
     <Content Include="Views\Requester\EditHIT.cshtml" />
     <Content Include="Views\Requester\HitAddCompleted.cshtml" />
     <Content Include="Views\Shared\ViewHIT.cshtml" />
+    <Content Include="Views\Worker\Work.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -382,6 +387,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705141214545_init-database-007.resx">
       <DependentUpon>201705141214545_init-database-007.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706111603162_init-database-008.resx">
+      <DependentUpon>201706111603162_init-database-008.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
