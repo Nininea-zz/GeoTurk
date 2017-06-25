@@ -86,7 +86,7 @@ namespace GeoTurk.Controllers
             var currentUser = DB.Users.SingleOrDefault(x => x.UserName == model.UserName && (x.PasswordHash == null || x.PasswordHash == ""));
             if (currentUser != null)
             {
-                return RedirectToAction("SetPassword");
+                return RedirectToAction("SetPassword", "Account");
             }
 
             var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
@@ -97,7 +97,7 @@ namespace GeoTurk.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", "Account", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -256,7 +256,7 @@ namespace GeoTurk.Controllers
             }
             DB.SaveChanges();
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Login", "Account");
         }
 
         protected override void Dispose(bool disposing)
@@ -304,7 +304,7 @@ namespace GeoTurk.Controllers
             currentUser.PasswordHash = UserManager.PasswordHasher.HashPassword(model.NewPassword);
             DB.SaveChanges();
 
-            return RedirectToAction("login");
+            return RedirectToAction("login", "Account");
         }
 
         #region Helpers

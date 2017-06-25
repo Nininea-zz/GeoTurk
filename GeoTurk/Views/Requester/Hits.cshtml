@@ -47,17 +47,25 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu-@hit.HITID">
                             <li style="display: @(hit.PublishDate.HasValue ? "initial" : "none;");">
-                                <a href="@Html.Raw(Url.Action("UnpublishHIT", "Requester", new { hitID = hit.HITID }))">Unpublish</a>
+                                <a href="@Html.Raw(Url.Action("UnpublishHIT", "Requester", new { hitID = hit.HITID }))">დამალვა</a>
                             </li>
                             <li style="display: @(hit.PublishDate.HasValue ? "none" : "initial");">
-                                <a href="@Html.Raw(Url.Action("PublishHIT", "Requester", new { hitID = hit.HITID }))">Publish</a>
+                                <a href="@Html.Raw(Url.Action("PublishHIT", "Requester", new { hitID = hit.HITID }))">გამოქვეყნება</a>
                             </li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="@Html.Raw(Url.Action("EditHIT", "Requester", new { hitID = hit.HITID }))">Edit</a></li>
+                            <li>
+                                <a href="@Html.Raw(Url.Action("EditHIT", "Requester", new { hitID = hit.HITID }))">რედაქტირება</a>
+                            </li>
                             @if (hit.WorkerHITs == null || hit.WorkerHITs.Count == 0)
                             {
-                                <li><a href="@Html.Raw(Url.Action("DeleteHIT", "Requester", new { hitID = hit.HITID }))">Delete</a></li>
+                                <li>
+                                    <a href="@Html.Raw(Url.Action("DeleteHIT", "Requester", new { hitID = hit.HITID }))">წაშლა</a>
+                                </li>
                             }
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="@Html.Raw(Url.Action("ViewHitAnswers", "Requester", new { hitID = hit.HITID }))">პასუხების ნახვა</a>
+                            </li>
                         </ul>
                     </div>
                 </td>

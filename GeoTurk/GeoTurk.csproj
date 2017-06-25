@@ -212,6 +212,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="Controllers\RequesterController.cs" />
+    <Compile Include="Enums\HITAnswerStatus.cs" />
     <Compile Include="Enums\ChoiseType.cs" />
     <Compile Include="Enums\AnswerType.cs" />
     <Compile Include="Global.asax.cs">
@@ -253,6 +254,10 @@
     <Compile Include="Migrations\201706181518092_init-database-009.cs" />
     <Compile Include="Migrations\201706181518092_init-database-009.Designer.cs">
       <DependentUpon>201706181518092_init-database-009.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706251421455_init-database-010.cs" />
+    <Compile Include="Migrations\201706251421455_init-database-010.Designer.cs">
+      <DependentUpon>201706251421455_init-database-010.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -356,6 +361,7 @@
     <Content Include="Views\Requester\HitAddCompleted.cshtml" />
     <Content Include="Views\Shared\ViewHIT.cshtml" />
     <Content Include="Views\Worker\Work.cshtml" />
+    <Content Include="Views\Requester\ViewHitAnswers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -398,6 +404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706181518092_init-database-009.resx">
       <DependentUpon>201706181518092_init-database-009.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706251421455_init-database-010.resx">
+      <DependentUpon>201706251421455_init-database-010.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -4,13 +4,14 @@ using GeoTurk.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace GeoTurk.Controllers
 {
-    [Authorize]
     public class RequesterController : Controller
     {
         private GeoTurkDbContext _db;
@@ -28,24 +29,28 @@ namespace GeoTurk.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public ActionResult Hits()
+        [Authorize]
+        public async Task<ActionResult> Hits()
         {
             var currentUserID = User.Identity.GetUserId<int>();
-            var hitsList = DB.HITs.Where(h => h.CreatorID == currentUserID).ToList();
+            var hitsList = await DB.HITs.Where(h => h.CreatorID == currentUserID).ToListAsync();
 
             return View(hitsList);
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Add()
         {
             var model = new HIT();
+
             model.AnswerTypesSelectList = Extensions.GetEnumSelectList<AnswerType>(false);
             model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
 
@@ -53,9 +58,11 @@ namespace GeoTurk.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditHIT(int hitID)
+        [Authorize]
+        public async Task<ActionResult> EditHIT(int hitID)
         {
-            var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
+            var hit = await DB.HITs.SingleOrDefaultAsync(h => h.HITID == hitID);
+
             if (hit == null)
             {
                 return View("Hits");
@@ -64,7 +71,8 @@ namespace GeoTurk.Controllers
             return View(hit);
         }
         [HttpPost]
-        public ActionResult EditHIT(HIT model)
+        [Authorize]
+        public async Task<ActionResult> EditHIT(HIT model)
         {
             model.AnswerTypesSelectList = Extensions.GetEnumSelectList<AnswerType>(false);
             model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
@@ -77,7 +85,7 @@ namespace GeoTurk.Controllers
             if (model.HITID != 0)
             {
                 // Edit
-                var hit = DB.HITs.SingleOrDefault(h => h.HITID == model.HITID);
+                var hit = await DB.HITs.SingleOrDefaultAsync(h => h.HITID == model.HITID);
                 if (hit == null)
                 {
                     return View(model);
@@ -100,7 +108,7 @@ namespace GeoTurk.Controllers
                 hit.Title = model.Title;
                 hit.WorkersCount = model.WorkersCount;
 
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
 
                 return Json(new { success = true, message = "დავალება განახლდა" });
             }
@@ -109,7 +117,8 @@ namespace GeoTurk.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddHIT(HIT model)
+        [Authorize]
+        public async Task<ActionResult> AddHIT(HIT model)
         {
             if (ModelState.IsValid)
             {
@@ -121,7 +130,7 @@ namespace GeoTurk.Controllers
                 {
                     model.CreatorID = User.Identity.GetUserId<int>();
                     DB.HITs.Add(model);
-                    DB.SaveChanges();
+                    await DB.SaveChangesAsync();
 
                     return View("HitAddCompleted");
                 }
@@ -134,7 +143,8 @@ namespace GeoTurk.Controllers
         }
 
         [HttpGet]
-        public ActionResult SaveHIT(HIT hit, string[] possibleAnswers)
+        [Authorize]
+        public async Task<ActionResult> SaveHIT(HIT hit, string[] possibleAnswers)
         {
             var taskChoises = new List<TaskChoise>();
             foreach (var answer in possibleAnswers)
@@ -149,26 +159,28 @@ namespace GeoTurk.Controllers
             hit.CreatorID = User.Identity.GetUserId<int>();
 
             DB.HITs.Add(hit);
-            DB.SaveChanges();
+            await DB.SaveChangesAsync();
 
             return Json(new { success = true, message = "დავალება შეიქმნა" });
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult SaveSuccess()
         {
             return View("HitAddCompleted");
         }
 
         [HttpGet]
-        public ActionResult DeleteHIT(int hitID, string caller)
+        [Authorize]
+        public async Task<ActionResult> DeleteHIT(int hitID, string caller)
         {
             if (string.IsNullOrEmpty(caller))
             {
                 caller = "Hits";
             }
 
-            var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
+            var hit = await DB.HITs.SingleOrDefaultAsync(h => h.HITID == hitID);
             if (hit != null)
             {
                 if (hit.WorkerHITs != null && hit.WorkerHITs.Count > 0)
@@ -178,7 +190,7 @@ namespace GeoTurk.Controllers
                 else
                 {
                     DB.HITs.Remove(hit);
-                    DB.SaveChanges();
+                    await DB.SaveChangesAsync();
                 }
             }
 
@@ -186,49 +198,82 @@ namespace GeoTurk.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult My()
         {
             return View();
         }
 
         [HttpGet]
-        public ActionResult PublishHIT(int hitID)
+        [Authorize]
+        public async Task<ActionResult> PublishHIT(int hitID)
         {
-            var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
+            var hit = await DB.HITs.SingleOrDefaultAsync(h => h.HITID == hitID);
 
             if (hit != null)
             {
                 hit.PublishDate = DateTime.Now;
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
             }
 
-            return RedirectToAction("Hits");
+            return RedirectToAction("Hits", "Requester");
         }
 
         [HttpGet]
-        public ActionResult UnpublishHIT(int hitID)
+        [Authorize]
+        public async Task<ActionResult> UnpublishHIT(int hitID)
         {
-            var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
+            var hit = await DB.HITs.SingleOrDefaultAsync(h => h.HITID == hitID);
 
             if (hit != null)
             {
                 hit.PublishDate = null;
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
             }
 
-            return RedirectToAction("Hits");
+            return RedirectToAction("Hits", "Requester");
         }
 
-        //[HttpGet]
-        //public ActionResult ViewHitAnswers(int hitID)
-        //{
-        //    var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
-        //    if (hit == null)
-        //    {
-        //        return RedirectToAction("Hits", "Requester");
-        //    }
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> ViewHitAnswers(int hitID)
+        {
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
-        //    var hitAnswers = hit.HITAnswers.ToList();
-        //}
+            var hit = await DB.HITs.FirstOrDefaultAsync(x => x.HITID == hitID && x.CreatorID == userID);
+            if (hit == null)
+            {
+                return RedirectToAction("Hits", "Requester");
+            }
+
+            ViewBag.HITTitle = hit.Title;
+
+            var hitAnswers = hit.WorkerHITs.ToList();
+
+            return View(hitAnswers);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> SetHITAnswerStatus(int hitID, int workerID, HITAnswerStatus status)
+        {
+            var workerHit = await DB.WorkerHITs.FirstOrDefaultAsync(x => x.HITID == hitID && x.WorkerID == workerID);
+            if (workerHit == null)
+            {
+                return RedirectToAction("Hits", "Requester");
+            }
+
+            if (workerHit.Status == HITAnswerStatus.None)
+            {
+                workerHit.Status = status;
+                await DB.SaveChangesAsync();
+            }
+
+            return RedirectToAction("ViewHitAnswers", "Requester", new { hitID = hitID });
+        }
     }
 }

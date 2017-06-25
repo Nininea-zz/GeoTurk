@@ -2,13 +2,14 @@
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace GeoTurk.Controllers
 {
-    [Authorize]
     public class WorkerController : Controller
     {
         private GeoTurkDbContext _db;
@@ -25,20 +26,26 @@ namespace GeoTurk.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Hits()
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> Hits()
         {
             var currentUserID = User.Identity.GetUserId<int>(); 
-            var hitsList = DB.WorkerHITs.Where(h => h.WorkerID == currentUserID).Select(wh => wh.HIT).ToList();
+            var hitsList = await DB.WorkerHITs.Where(h => h.WorkerID == currentUserID).Select(wh => wh.HIT).ToListAsync();
 
             return View(hitsList);
         }
 
-        public ActionResult Find()
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> Find()
         {
             var currentUserID = User.Identity.GetUserId<int>();
             if (currentUserID == 0)
@@ -47,20 +54,24 @@ namespace GeoTurk.Controllers
             }
 
             var workerHits = DB.WorkerHITs.Where(wh => wh.WorkerID == currentUserID).Select(wh => wh.HITID);
-            var hits = DB.HITs
+            var hits = await DB.HITs
                 .Where(h => h.PublishDate.HasValue && !workerHits.Contains(h.HITID))
                 .OrderByDescending(x => x.PublishDate)
-                .ToList();
+                .ToListAsync();
 
             return View(hits);
         }
 
+        [Authorize]
+        [HttpGet]
         public ActionResult My()
         {
             return View();
         }
 
-        public ActionResult ViewHit(int hitID)
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> ViewHit(int hitID)
         {
             var userID = User.Identity.GetUserId<int>();
             if (userID == 0)
@@ -68,10 +79,10 @@ namespace GeoTurk.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
+            var hit = await DB.HITs.FirstOrDefaultAsync(x => x.HITID == hitID);
             if (hit == null)
             {
-                return RedirectToAction("Hits");
+                return RedirectToAction("Hits", "Worker");
             }
 
             var userHit = hit.WorkerHITs.FirstOrDefault(x => x.WorkerID == userID);
@@ -83,7 +94,9 @@ namespace GeoTurk.Controllers
             return View(hit);
         }
 
-        public ActionResult Work(int hitID)
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> Work(int hitID)
         {
             var userID = User.Identity.GetUserId<int>();
             if (userID == 0)
@@ -91,24 +104,25 @@ namespace GeoTurk.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
+            var hit = await DB.HITs.FirstOrDefaultAsync(x => x.HITID == hitID);
             if (hit == null)
             {
                 return RedirectToAction("Find", "Worker");
             }
 
-            var userHit = DB.WorkerHITs.FirstOrDefault(x => x.WorkerID == userID && x.HITID == hitID);
+            var userHit = await DB.WorkerHITs.FirstOrDefaultAsync(x => x.WorkerID == userID && x.HITID == hitID);
             if (userHit == null)
             {
                 userHit = new WorkerHIT
                 {
                     HITID = hitID,
                     WorkerID = userID,
-                    AssignDate = DateTime.Now
+                    AssignDate = DateTime.Now,
+                    Status = Enums.HITAnswerStatus.None
                 };
 
                 hit.WorkerHITs.Add(userHit);
-                DB.SaveChanges();
+                await DB.SaveChangesAsync();
             }
             else
             {
@@ -121,7 +135,9 @@ namespace GeoTurk.Controllers
             return View(hit);
         }
 
-        public ActionResult AddHITAnswers(int hitID, string userAnswer, List<int> taskChoiseIDs)
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> AddHITAnswers(int hitID, string userAnswer, List<int> taskChoiseIDs)
         {
             if (string.IsNullOrEmpty(userAnswer) && (taskChoiseIDs == null || taskChoiseIDs.Count == 0))
             {
@@ -144,13 +160,13 @@ namespace GeoTurk.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
+            var hit = await DB.HITs.FirstOrDefaultAsync(x => x.HITID == hitID);
             if (hit == null)
             {
                 return RedirectToAction("Find", "Worker");
             }
 
-            var userHit = DB.WorkerHITs.FirstOrDefault(x => x.WorkerID == userID && x.HITID == hitID);
+            var userHit = await DB.WorkerHITs.FirstOrDefaultAsync(x => x.WorkerID == userID && x.HITID == hitID);
             if (userHit == null)
             {
                 return Json(new { success = false, message = " პასუხის გაცემამდე გთხოვთ დაიწყოთ ეს დავალება " });
@@ -189,7 +205,7 @@ namespace GeoTurk.Controllers
             
             userHit.CompleteDate = DateTime.Now;
 
-            DB.SaveChanges();
+            await DB.SaveChangesAsync();
 
             return Json(new { success = true });
         }

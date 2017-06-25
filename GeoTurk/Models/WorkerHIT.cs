@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeoTurk.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,7 +18,7 @@ namespace GeoTurk.Models
 
         public DateTime? CompleteDate { get; set; }
 
-        public bool IsPaid { get; set; }
+        public HITAnswerStatus Status { get; set; }
 
         public virtual ICollection<HITAnswer> HITAnswers { get; set; }
 

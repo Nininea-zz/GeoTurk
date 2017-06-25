@@ -1,0 +1,125 @@
+﻿@model List<WorkerHIT>
+
+@{
+    ViewBag.Title = "დავალების პასუხები - " + ViewBag.HITTitle;
+}
+
+<h3> დავალების პასუხები </h3>
+
+
+<table class="table table-striped" style="width: 100%">
+    <thead>
+        <tr>
+            <th>
+                შემსრულებლის სახელი
+            </th>
+
+            <th>
+                ხანგრძლივობა
+            </th>
+            <th>
+                მდგომარეობა
+            </th>
+            <th>
+                სტატუსი
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var workerHIT in Model)
+        {
+            var minutesToComplete = string.Empty;
+            var status = string.Empty;
+            switch (workerHIT.Status)
+            {
+                case GeoTurk.Enums.HITAnswerStatus.None:
+                    status = "ახალი";
+                    break;
+                case GeoTurk.Enums.HITAnswerStatus.Approved:
+                    status = "დადასტურებული";
+                    break;
+                case GeoTurk.Enums.HITAnswerStatus.Rejected:
+                    status = "უარყოფილი";
+                    break;
+            }
+
+            if (workerHIT.CompleteDate.HasValue)
+            {
+                minutesToComplete = (workerHIT.CompleteDate - workerHIT.AssignDate).Value.TotalMinutes.ToString();
+            }
+
+            <tr>
+                <td>
+                    @workerHIT.Worker.FirstName @workerHIT.Worker.LastName
+                </td>
+                <td>
+                    @minutesToComplete
+                </td>
+                <td>
+                    @(workerHIT.CompleteDate.HasValue ? "დასრულებული" : "მიმდინარე")
+                </td>
+                <td>
+                    @status
+                </td>
+                <td>
+                    @if (workerHIT.Status == GeoTurk.Enums.HITAnswerStatus.None)
+                    {
+                        <div class="dropdown">
+                            <div class="pull-right">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu-@workerHIT.WorkerID" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu-@workerHIT.WorkerID">
+                                    <li>
+                                        <a href="@Html.Raw(Url.Action("SetHITAnswerStatus", "Requester", new { hitID = workerHIT.HITID, workerID = workerHIT.WorkerID, status = GeoTurk.Enums.HITAnswerStatus.Approved }))">
+                                            დადასტურება
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Html.Raw(Url.Action("SetHITAnswerStatus", "Requester", new { hitID = workerHIT.HITID, workerID = workerHIT.WorkerID, status = GeoTurk.Enums.HITAnswerStatus.Rejected }))">
+                                            უარყოფა
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    @if (workerHIT.HIT.AnswerType == GeoTurk.Enums.AnswerType.FreeText)
+                    {
+                        <div class="col-md-12">
+                            - @workerHIT.UserAnswer
+                        </div>
+                    }
+                    else
+                    if (workerHIT.HIT.AnswerType == GeoTurk.Enums.AnswerType.FileUpload)
+                    {
+                        <a href="@workerHIT.UserAnswer" target="_blank">- @workerHIT.UserAnswer</a>
+                    }
+                    else
+                    {
+                        foreach (var answer in workerHIT.HITAnswers)
+                        {
+                            <div class="col-md-12">
+                                @if (workerHIT.HIT.AnswerType == GeoTurk.Enums.AnswerType.ChoiseImage)
+                                {
+                                    <a href="@answer.TaskChoise.Label" target="_blank">- @answer.TaskChoise.Label</a>
+                                }
+                                else
+                                {
+                                    <span>- @answer.TaskChoise.Label</span>
+                                }
+                            </div>
+                        }
+                    }
+                </td>
+                <td></td>
+            </tr>
+        }
+
+    </tbody>
+</table>
