@@ -83,6 +83,8 @@
 
     $(function () {
         $("#submit-answers").on("click", function () {
+            $("#submit-answers").attr("disabled", "disabled");
+
             var userAnswer ;
             var answerType = $("#answers-group").data("answer-type");
 
@@ -100,23 +102,33 @@
                     taskChoiseIDs.push(item.value);
                 });
             }
+            var $messageBox = $("#validation-message");
+            $messageBox.removeClass("text-success");
+            $messageBox.removeClass("text-danger");
 
-                $.ajax({
-                    url: "@Url.Action("AddHITAnswers", "Worker")",
-                    type: "POST",
-                    data: {
-                        hitID,
-                        userAnswer,
-                        taskChoiseIDs
-                    },
-                    success: function (res) {
-                        if (res.success) {
-                            $("#validation-message")
-                        }
+            $.ajax({
+                url: "@Url.Action("AddHITAnswers", "Worker")",
+                type: "POST",
+                data: {
+                    hitID,
+                    userAnswer,
+                    taskChoiseIDs
+                },
+                success: function (res) {
+                    $messageBox.html(res.message);
+
+                    if (res.success) {
+                        $messageBox.addClass("text-success");
+                        setTimeout(function () {
+                            window.location.assign("@Url.Action("ViewHit", "Worker", new { hitID = Model.HITID })");
+                        }, 2000);
                     }
-                });
-
-
+                    else {
+                        $messageBox.addClass("text-danger");
+                        $("#submit-answers").removeAttr("disabled");
+                    }
+                }
+            });
         });
     });
 

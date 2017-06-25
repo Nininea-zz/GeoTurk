@@ -181,6 +181,7 @@ namespace GeoTurk.Controllers
                 if (hit.ChoiseType == Enums.ChoiseType.Single)
                 {
                     userHit.HITAnswers = new List<HITAnswer>();
+
                     userHit.HITAnswers.Add(new HITAnswer()
                     {
                         HITID = hitID,
@@ -207,7 +208,7 @@ namespace GeoTurk.Controllers
 
             await DB.SaveChangesAsync();
 
-            return Json(new { success = true });
+            return Json(new { success = true, message = " თქვენი პასუხი მიღებულია " });
         }
     }
-}
+}   
