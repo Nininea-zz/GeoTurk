@@ -10,7 +10,6 @@ namespace GeoTurk.Models
         public int TaskChoiseID { get; set; }
         public bool IsCorrect { get; set; }
         public string Label { get; set; }
-        public string Value { get; set; }
 
         public int HITID { get; set; }
         public virtual HIT HIT { get; set; }

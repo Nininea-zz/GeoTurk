@@ -36,19 +36,19 @@ namespace GeoTurk.Models
         [MaxLength(300, ErrorMessage = "დასახელება არ შეიძლება იყოს 300 სიმბოლოზე მეტი")]
         [Required(ErrorMessage = "შეავსეთ დასახელება")]
         public string Title { get; set; }
-        //აღწერა
+        // აღწერა
         [DisplayName("აღწერა")]
         [MaxLength(int.MaxValue, ErrorMessage = "დასახელება არ შეიძლება იყოს 2 000 000 სიმბოლოზე მეტი")]
         [Required(ErrorMessage = "შეავსეთ აღწერა")]
         public string Description { get; set; }
 
-        //ხანგრძლივობა წუთებში
+        // ხანგრძლივობა წუთებში
         [DisplayName("ხანგრძლივობა წუთებში")]
         [Range(1, 9999.99, ErrorMessage = "ხანგრძლივობა უნდა იყოს 1-დან 9999.99-მდე")]
         [Required(ErrorMessage = "შეავსეთ ხანგრძლივობა")]
         public decimal DurationInMinutes { get; set; } = 1;
 
-        //ინსტრუქცია, დეტალური აღწერა ამოცანისთვის
+        // ინსტრუქცია, დეტალური აღწერა ამოცანისთვის
         [DisplayName("ინსტრუქცია")]
         [Required(ErrorMessage = "შეავსეთ ინსტრუქცია")]
         [MaxLength(int.MaxValue, ErrorMessage = "ინსტრუქცია არ შეიძლება იყოს 2 000 000 სიმბოლოზე მეტი")]
@@ -59,14 +59,14 @@ namespace GeoTurk.Models
         [MaxLength(int.MaxValue, ErrorMessage = "დაკავშრებული ფაილის მისამართი არ შეიძლება იყოს 2 000 000 სიმბოლოზე მეტი")]
         public string RelatedFilePath { get; set; }
 
-        //ვადის გასვლის თარიღი (შემდეგ ამოცანა გახდება არა აქტიური)
+        // ვადის გასვლის თარიღი (შემდეგ ამოცანა გახდება არა აქტიური)
         [DisplayName("ბოლო ვადა")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "შეავსეთ ბოლო ვადა")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ExpireDate { get; set; }
 
-        //კითხვის ტიპი, რომელიც განისაზღვრება დინამიურად
+        // კითხვის ტიპი, რომელიც განისაზღვრება დინამიურად
         [DisplayName("კითხვის ტიპი")]
         [Required(ErrorMessage = "შეავსეთ კითხვის ტიპი")]
         public AnswerType AnswerType { get; set; }
@@ -76,14 +76,14 @@ namespace GeoTurk.Models
         [NotMapped]
         public IEnumerable<SelectListItem> AnswerTypesSelectList { get; set; }
 
-        //პასუხის არჩევის ტიპი, ასევე განისაზღვრება დინამიურად
+        // პასუხის არჩევის ტიპი, ასევე განისაზღვრება დინამიურად
         [DisplayName("პასუხის ტიპი")]
         public ChoiseType? ChoiseType { get; set; }
 
         [NotMapped]
         public IEnumerable<SelectListItem> ChoiseTypesSelectList { get; set; }
 
-        //სავარაუდო პასუხები
+        // სავარაუდო პასუხები
         public virtual ICollection<TaskChoise> TaskChoises { get; set; }
 
         // HIT-ის შემსრულებლები
@@ -110,5 +110,6 @@ namespace GeoTurk.Models
         // შემკვეთი მომხმარებელი
         public int CreatorID { get; set; }
         public virtual User Creator { get; set; }
+        
     }
 }

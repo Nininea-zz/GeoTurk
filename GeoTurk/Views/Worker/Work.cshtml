@@ -1,15 +1,124 @@
-﻿@model GeoTurk.Models.HIT
+﻿@using GeoTurk.Enums;
+
+@model GeoTurk.Models.HIT
 
 @{
     ViewBag.Title = $"დავალების შესრულება - { Model.Title }";
 }
 
 <h3>@Model.Title</h3>
-<div class="row row-details">
-    <div class="form-group">
-        @Html.LabelFor(model => model.Instuction)
-        <div>
+
+<div class="col-md-8 col-md-offset-2">
+    <div class="row row-details form-group">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Instuction)
+        </div>
+        <div class="col-md-8 value">
             @Html.DisplayFor(model => model.Instuction)
         </div>
     </div>
+    <hr />
+    <div class="form-group row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.DurationInMinutes)
+        </div>
+        <div class="col-md-8 value">
+            @Html.DisplayFor(model => model.DurationInMinutes)
+        </div>
+    </div>
+    <hr />
+    <label>შეავსეთ შესაბამისი პასუხი</label>
+
+    <div class="form-group row" data-answer-type="@((int)Model.AnswerType)" id="answers-group">
+        @switch (Model.AnswerType)
+        {
+            case AnswerType.FreeText:
+                <div class="col-md-12">
+                    <textarea id="free-text-answer" placeholder="შეიყვანეთ თქვენი პასუხი" style="max-height: 500px; max-width: 100%; width: 100%;"></textarea>
+                </div>
+                break;
+            case AnswerType.FileUpload:
+                <div class="col-md-12">
+                    <input type="text" id="file-upload-url" placeholder="ჩაწერეთ ასატვირთი ფაილის მისამართი" style="width: 100%; max-width: 100%; " />
+                </div>
+                break;
+            case AnswerType.ChoiseText:
+            case AnswerType.ChoiseImage:
+                <div id="hit-answers" data-choise-type="@(Model.ChoiseType == ChoiseType.Single ? "radio" : "checkbox")">
+                    @foreach (var taskChoise in Model.TaskChoises)
+                    {
+                        @ChoiseHelper(taskChoise);
+                    }
+                </div>
+                break;
+        }
+    </div>
+    <div id="validation-message">
+
+    </div>
+    <div class="form-group">
+        <div id="submit-answers" class="btn btn-primary">პასუხის გაგზავნა</div>
+    </div>
 </div>
+
+
+@helper ChoiseHelper(TaskChoise taskChoise)
+{
+    <div class="col-md-12">
+        @if (Model.ChoiseType == ChoiseType.Single)
+        {
+            <input id="choise-@taskChoise.TaskChoiseID" type="radio" name="taskChoise" value="@taskChoise.TaskChoiseID" style="margin-right: 0.3em;" />
+        }
+        else
+        {
+            <input id="choise-@taskChoise.TaskChoiseID" type="checkbox" value="@taskChoise.TaskChoiseID" style="margin-right: 0.3em;" />
+        }
+        <label for="choise-@taskChoise.TaskChoiseID">@taskChoise.Label</label>
+    </div>
+
+}
+
+<script>
+    var hitID = "@Model.HITID";
+
+    $(function () {
+        $("#submit-answers").on("click", function () {
+            var userAnswer ;
+            var answerType = $("#answers-group").data("answer-type");
+
+            if (answerType == answerTypes.FreeText) {
+                userAnswer = $("#free-text-answer").val();
+            }
+            else {
+                userAnswer = $("#file-upload-url").val();
+            }
+
+            var taskChoiseIDs = [];
+
+            if (answerType == answerTypes.ChoiseText || answerType == answerTypes.ChoiseImage) {
+                $("#hit-answers").find("input:checked").each(function (index, item) {
+                    taskChoiseIDs.push(item.value);
+                });
+            }
+
+                $.ajax({
+                    url: "@Url.Action("AddHITAnswers", "Worker")",
+                    type: "POST",
+                    data: {
+                        hitID,
+                        userAnswer,
+                        taskChoiseIDs
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            $("#validation-message")
+                        }
+                    }
+                });
+
+
+        });
+    });
+
+
+</script>

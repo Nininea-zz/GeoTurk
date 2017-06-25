@@ -19,5 +19,9 @@ namespace GeoTurk.Models
 
         public bool IsPaid { get; set; }
 
+        public virtual ICollection<HITAnswer> HITAnswers { get; set; }
+
+        public string UserAnswer { get; set; }
+
     }
 }

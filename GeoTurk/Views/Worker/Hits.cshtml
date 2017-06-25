@@ -1,14 +1,19 @@
 ﻿@using GeoTurk.Models;
 @using GeoTurk.Helpers;
+@using Microsoft.AspNet.Identity;
 
 @model List<HIT>
 
 @{
     ViewBag.Title = "ჩემი ამოცანები";
     var hits = Model;
+
+    var currentUserID = User.Identity.GetUserId<int>();
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="row" style="text-align:center;">
+    <h3><b>@ViewBag.Title</b></h3>
+</div>
 
 <table class="table table-striped" style="width: 100%">
     <thead>
@@ -28,18 +33,24 @@
             <th>
                 ტაგები
             </th>
+            <th>
+                სტატუსი
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var hit in hits)
         {
+            var workerHit = hit.WorkerHITs.FirstOrDefault(wh => wh.WorkerID == currentUserID);
+            var isCompleted = workerHit != null && workerHit.CompleteDate.HasValue;
             <tr>
                 <td>@hit.Title</td>
                 <td>@hit.Description</td>
                 <td>@hit.DurationInMinutes წუთი</td>
                 <td>@hit.ExpireDate.ToGeorgianDate()</td>
                 <td>@hit.Tags</td>
+                <td>@(isCompleted ? "დასრულებული" : "მიმდინარე")</td>
                 <td>
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu-@hit.HITID" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

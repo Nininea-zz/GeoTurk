@@ -93,6 +93,13 @@ namespace GeoTurk.Models
                 .HasRequired(wh => wh.HIT).WithMany(h => h.WorkerHITs).HasForeignKey(wh => wh.HITID).WillCascadeOnDelete(false);
             modelBuilder.Entity<WorkerHIT>()
                 .Property(wh => wh.AssignDate).IsRequired();
+            modelBuilder.Entity<WorkerHIT>()
+                .HasMany(a => a.HITAnswers).WithRequired(x => x.WorkerHIT).HasForeignKey(a => new { a.WorkerID, a.HITID });
+
+            modelBuilder.Entity<HITAnswer>()
+                .HasKey(a => new { a.WorkerID, a.HITID, a.TaskChoiseID });
+            modelBuilder.Entity<HITAnswer>()
+                .HasRequired(x => x.TaskChoise).WithMany().HasForeignKey(x => x.TaskChoiseID).WillCascadeOnDelete(true);
         }
 
         public override int SaveChanges()

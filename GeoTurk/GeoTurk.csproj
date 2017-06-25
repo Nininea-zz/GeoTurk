@@ -250,9 +250,14 @@
     <Compile Include="Migrations\201706111603162_init-database-008.Designer.cs">
       <DependentUpon>201706111603162_init-database-008.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706181518092_init-database-009.cs" />
+    <Compile Include="Migrations\201706181518092_init-database-009.Designer.cs">
+      <DependentUpon>201706181518092_init-database-009.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GeoTurkDbContext.cs" />
+    <Compile Include="Models\HITAnswer.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\TaskChoise.cs" />
@@ -390,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706111603162_init-database-008.resx">
       <DependentUpon>201706111603162_init-database-008.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706181518092_init-database-009.resx">
+      <DependentUpon>201706181518092_init-database-009.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

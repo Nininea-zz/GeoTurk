@@ -19,17 +19,21 @@ namespace GeoTurk.Controllers
             get
             {
                 if (_db == null)
+                {
                     _db = new GeoTurkDbContext();
+                }
 
                 return _db;
             }
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public ActionResult Hits()
         {
             var currentUserID = User.Identity.GetUserId<int>();
@@ -38,6 +42,7 @@ namespace GeoTurk.Controllers
             return View(hitsList);
         }
 
+        [HttpGet]
         public ActionResult Add()
         {
             var model = new HIT();
@@ -47,11 +52,14 @@ namespace GeoTurk.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public ActionResult EditHIT(int hitID)
         {
             var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
             if (hit == null)
+            {
                 return View("Hits");
+            }
 
             return View(hit);
         }
@@ -62,14 +70,18 @@ namespace GeoTurk.Controllers
             model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
 
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
             if (model.HITID != 0)
             {
                 // Edit
                 var hit = DB.HITs.SingleOrDefault(h => h.HITID == model.HITID);
                 if (hit == null)
+                {
                     return View(model);
+                }
 
                 if (model.WorkersCount < hit.WorkerHITs.Count)
                 {
@@ -96,12 +108,15 @@ namespace GeoTurk.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult AddHIT(HIT model)
         {
             if (ModelState.IsValid)
             {
                 if (model.AnswerType == AnswerType.ChoiseImage || model.AnswerType == AnswerType.ChoiseText)
+                {
                     return View("AddHITAnswers", model);
+                }
                 else
                 {
                     model.CreatorID = User.Identity.GetUserId<int>();
@@ -118,14 +133,17 @@ namespace GeoTurk.Controllers
             return View("Add", model);
         }
 
+        [HttpGet]
         public ActionResult SaveHIT(HIT hit, string[] possibleAnswers)
         {
             var taskChoises = new List<TaskChoise>();
             foreach (var answer in possibleAnswers)
+            {
                 taskChoises.Add(new TaskChoise()
                 {
                     Label = answer
                 });
+            }
 
             hit.TaskChoises = taskChoises;
             hit.CreatorID = User.Identity.GetUserId<int>();
@@ -136,21 +154,27 @@ namespace GeoTurk.Controllers
             return Json(new { success = true, message = "დავალება შეიქმნა" });
         }
 
+        [HttpGet]
         public ActionResult SaveSuccess()
         {
             return View("HitAddCompleted");
         }
 
+        [HttpGet]
         public ActionResult DeleteHIT(int hitID, string caller)
         {
             if (string.IsNullOrEmpty(caller))
+            {
                 caller = "Hits";
+            }
 
             var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
             if (hit != null)
             {
                 if (hit.WorkerHITs != null && hit.WorkerHITs.Count > 0)
+                {
                     ModelState.AddModelError("", "");
+                }
                 else
                 {
                     DB.HITs.Remove(hit);
@@ -161,11 +185,13 @@ namespace GeoTurk.Controllers
             return RedirectToAction(caller);
         }
 
+        [HttpGet]
         public ActionResult My()
         {
             return View();
         }
 
+        [HttpGet]
         public ActionResult PublishHIT(int hitID)
         {
             var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
@@ -179,6 +205,7 @@ namespace GeoTurk.Controllers
             return RedirectToAction("Hits");
         }
 
+        [HttpGet]
         public ActionResult UnpublishHIT(int hitID)
         {
             var hit = DB.HITs.SingleOrDefault(h => h.HITID == hitID);
@@ -191,5 +218,17 @@ namespace GeoTurk.Controllers
 
             return RedirectToAction("Hits");
         }
+
+        //[HttpGet]
+        //public ActionResult ViewHitAnswers(int hitID)
+        //{
+        //    var hit = DB.HITs.FirstOrDefault(x => x.HITID == hitID);
+        //    if (hit == null)
+        //    {
+        //        return RedirectToAction("Hits", "Requester");
+        //    }
+
+        //    var hitAnswers = hit.HITAnswers.ToList();
+        //}
     }
 }

@@ -1,4 +1,11 @@
-﻿function showToastrOnFormSuccess(data) {
+﻿var answerTypes = {
+    FreeText: 1,
+    FileUpload: 2,
+    ChoiseText: 3,
+    ChoiseImage: 4
+}
+
+function showToastrOnFormSuccess(data) {
     if (!data){
         return;
     }
