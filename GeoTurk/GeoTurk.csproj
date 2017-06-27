@@ -212,6 +212,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="Controllers\RequesterController.cs" />
+    <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="Enums\HITAnswerStatus.cs" />
     <Compile Include="Enums\ChoiseType.cs" />
     <Compile Include="Enums\AnswerType.cs" />
@@ -259,10 +260,15 @@
     <Compile Include="Migrations\201706251421455_init-database-010.Designer.cs">
       <DependentUpon>201706251421455_init-database-010.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706261759596_init-database-011.cs" />
+    <Compile Include="Migrations\201706261759596_init-database-011.Designer.cs">
+      <DependentUpon>201706261759596_init-database-011.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GeoTurkDbContext.cs" />
     <Compile Include="Models\HITAnswer.cs" />
+    <Compile Include="Models\TransactionLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\TaskChoise.cs" />
@@ -407,6 +413,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706251421455_init-database-010.resx">
       <DependentUpon>201706251421455_init-database-010.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706261759596_init-database-011.resx">
+      <DependentUpon>201706261759596_init-database-011.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

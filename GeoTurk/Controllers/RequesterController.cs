@@ -1,5 +1,4 @@
-﻿using GeoTurk.Enums;
-using GeoTurk.Helpers;
+﻿using GeoTurk.Helpers;
 using GeoTurk.Models;
 using Microsoft.AspNet.Identity;
 using System;
@@ -51,8 +50,8 @@ namespace GeoTurk.Controllers
         {
             var model = new HIT();
 
-            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<AnswerType>(false);
-            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
+            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<Enums.AnswerType>(false);
+            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<Enums.ChoiseType>(false);
 
             return View(model);
         }
@@ -74,8 +73,8 @@ namespace GeoTurk.Controllers
         [Authorize]
         public async Task<ActionResult> EditHIT(HIT model)
         {
-            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<AnswerType>(false);
-            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
+            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<Enums.AnswerType>(false);
+            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<Enums.ChoiseType>(false);
 
             if (!ModelState.IsValid)
             {
@@ -122,7 +121,7 @@ namespace GeoTurk.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.AnswerType == AnswerType.ChoiseImage || model.AnswerType == AnswerType.ChoiseText)
+                if (model.AnswerType == Enums.AnswerType.ChoiseImage || model.AnswerType == Enums.AnswerType.ChoiseText)
                 {
                     return View("AddHITAnswers", model);
                 }
@@ -136,8 +135,8 @@ namespace GeoTurk.Controllers
                 }
             }
 
-            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<AnswerType>(false);
-            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<ChoiseType>(false);
+            model.AnswerTypesSelectList = Extensions.GetEnumSelectList<Enums.AnswerType>(false);
+            model.ChoiseTypesSelectList = Extensions.GetEnumSelectList<Enums.ChoiseType>(false);
 
             return View("Add", model);
         }
@@ -259,7 +258,7 @@ namespace GeoTurk.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> SetHITAnswerStatus(int hitID, int workerID, HITAnswerStatus status)
+        public async Task<ActionResult> SetHITAnswerStatus(int hitID, int workerID, Enums.HITAnswerStatus status)
         {
             var workerHit = await DB.WorkerHITs.FirstOrDefaultAsync(x => x.HITID == hitID && x.WorkerID == workerID);
             if (workerHit == null)
@@ -267,9 +266,50 @@ namespace GeoTurk.Controllers
                 return RedirectToAction("Hits", "Requester");
             }
 
-            if (workerHit.Status == HITAnswerStatus.None)
+            if (workerHit.Status == Enums.HITAnswerStatus.None)
             {
                 workerHit.Status = status;
+
+                if (status == Enums.HITAnswerStatus.Approved)
+                {
+                    var requesterID = User.Identity.GetUserId<int>();
+                    if (requesterID == 0)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    var requester = await DB.Users.FirstOrDefaultAsync(x => x.Id == requesterID);
+                    if (requester == null)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    var worker = await DB.Users.FirstOrDefaultAsync(x => x.Id == workerID);
+                    if (worker == null)
+                    {
+                        return RedirectToAction("ViewHitAnswers", "Requester", new { hitID = hitID });
+                    }
+
+                    var hitCost = workerHit.HIT.Cost;
+
+                    requester.Balance -= hitCost;
+                    worker.Balance += hitCost;
+
+                    DB.TransactionLogs.Add(new TransactionLog() {
+                        UserID = requester.Id,
+                        HITID = hitID,
+                        Type = Enums.TransactionType.HITCost,
+                        Amount = -hitCost
+                    });
+                    DB.TransactionLogs.Add(new TransactionLog()
+                    {
+                        UserID = worker.Id,
+                        HITID = hitID,
+                        Type = Enums.TransactionType.HITCost,
+                        Amount = hitCost
+                    });
+                }
+
                 await DB.SaveChangesAsync();
             }
 

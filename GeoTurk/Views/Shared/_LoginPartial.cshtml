@@ -7,12 +7,15 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
+                <a href="@Url.Action("UserTransactions", "Account")">ბალანსი: <span id="user-balance"></span></a>
+            </li>
+            <li>
                 @Html.ActionLink("გამარჯობა " + User.Identity.GetUserName() + "!", "ProfileInfo", "Account")
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">გამოსვლა</a></li>
         </ul>
     }
-}
+}   
 else
 {
     <ul class="nav navbar-nav navbar-right">
@@ -20,3 +23,15 @@ else
         <li>@Html.ActionLink("შესვლა", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetUserBalance", "Account")",
+            type: "POST",
+            success: function (res) {
+                $("#user-balance").html(res.balance);
+            }
+        });
+    })
+</script>

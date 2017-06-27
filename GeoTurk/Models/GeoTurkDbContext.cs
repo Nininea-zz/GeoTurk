@@ -20,6 +20,9 @@ namespace GeoTurk.Models
         public DbSet<TaskChoise> TaskChoises { get; set; }
         public DbSet<WorkerHIT> WorkerHITs { get; set; }
 
+        public DbSet<HITAnswer> HITAnswers { get; set; }
+
+        public DbSet<TransactionLog> TransactionLogs { get; set; }
 
 
         public GeoTurkDbContext() : base("GeoTurkConnectionString")
@@ -100,6 +103,15 @@ namespace GeoTurk.Models
                 .HasKey(a => new { a.WorkerID, a.HITID, a.TaskChoiseID });
             modelBuilder.Entity<HITAnswer>()
                 .HasRequired(x => x.TaskChoise).WithMany().HasForeignKey(x => x.TaskChoiseID).WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<TransactionLog>()
+                .Property(x => x.TransactionLogID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<TransactionLog>()
+                .HasRequired(x => x.User).WithMany().HasForeignKey(x => x.UserID).WillCascadeOnDelete(false);
+            modelBuilder.Entity<TransactionLog>()
+                .HasRequired(x => x.HIT).WithMany().HasForeignKey(x => x.HITID).WillCascadeOnDelete(false);
+
+
         }
 
         public override int SaveChanges()

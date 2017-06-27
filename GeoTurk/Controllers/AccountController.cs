@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using GeoTurk.Models;
 using System.Collections.Generic;
 using System.Security.Principal;
+using System.Data.Entity;
 
 namespace GeoTurk.Controllers
 {
@@ -225,9 +226,15 @@ namespace GeoTurk.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        [Authorize]
         public ActionResult ProfileInfo()
         {
-            var currentUser = DB.Users.Single(x => x.UserName == User.Identity.Name);
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var currentUser = DB.Users.Single(x => x.Id == userID);
 
             return View(currentUser);
         }
@@ -256,7 +263,7 @@ namespace GeoTurk.Controllers
             }
             DB.SaveChanges();
 
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)
@@ -305,6 +312,25 @@ namespace GeoTurk.Controllers
             DB.SaveChanges();
 
             return RedirectToAction("login", "Account");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> GetUserBalance()
+        {
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = await DB.Users.FirstOrDefaultAsync(x => x.Id == userID);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return Json(new { balance = user.Balance });
         }
 
         #region Helpers
