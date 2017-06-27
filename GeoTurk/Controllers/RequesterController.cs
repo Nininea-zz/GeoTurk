@@ -198,9 +198,44 @@ namespace GeoTurk.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult My()
+        public async Task<ActionResult> My()
         {
-            return View();
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = await DB.Users.FirstOrDefaultAsync(x => x.Id == userID);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var hits = await DB.HITs.Where(x => x.CreatorID == userID).ToListAsync();
+
+            var model = new RequesterPageViewModel();
+
+            if (hits != null)
+            {
+                var minDate = DateTime.Now.AddMonths(-1).Date;
+
+                model.HitsCount = hits.Count;
+                model.CompletedHits = hits.Where(h => h.IsCompleted).Count();
+
+                var hitsIDs = hits.Select(x => x.HITID);
+                model.WorkersCount = DB.WorkerHITs.Where(h => hitsIDs.Contains(h.HITID)).Select(x => x.WorkerID).Distinct().Count();
+                model.LastMonthCompletedHits = hits.Where(h => h.IsCompleted && h.CreateDate > minDate).Count();
+            }
+
+            model.Balance = user.Balance;
+            model.LastTransactions = await DB.TransactionLogs
+                .Where(t => t.UserID == user.Id)
+                .OrderByDescending(t => t.CreateDate)
+                .Take(5)
+                .ToListAsync();
+
+            return View(model);
         }
 
         [HttpGet]
@@ -295,18 +330,21 @@ namespace GeoTurk.Controllers
                     requester.Balance -= hitCost;
                     worker.Balance += hitCost;
 
-                    DB.TransactionLogs.Add(new TransactionLog() {
+                    DB.TransactionLogs.Add(new TransactionLog()
+                    {
                         UserID = requester.Id,
                         HITID = hitID,
                         Type = Enums.TransactionType.HITCost,
-                        Amount = -hitCost
+                        Amount = -hitCost,
+                        CreateDate = DateTime.Now
                     });
                     DB.TransactionLogs.Add(new TransactionLog()
                     {
                         UserID = worker.Id,
                         HITID = hitID,
                         Type = Enums.TransactionType.HITCost,
-                        Amount = hitCost
+                        Amount = hitCost,
+                        CreateDate = DateTime.Now
                     });
                 }
 

@@ -4,6 +4,7 @@
     ViewBag.Title = "დავალება";
 
     var isCompleted = ViewBag.IsCompleted ?? false;
+    var isMaxedOut = ViewBag.MaxWorkers ?? false;
 }
 
 <div class="row" style="text-align:center;">
@@ -50,15 +51,15 @@
         <hr />
         @if (!string.IsNullOrEmpty(Model.RelatedFilePath))
             {
-        <div class="row row-details">
-            <div class="form-group">
-                @Html.LabelFor(model => model.RelatedFilePath, new { @class = "col-md-4" })
-                <div class="col-md-8 value">
-                    <a href="@Model.RelatedFilePath" target="_blank">იხილეთ დაკავშრებული ფაილი</a>
+            <div class="row row-details">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RelatedFilePath, new { @class = "col-md-4" })
+                    <div class="col-md-8 value">
+                        <a href="@Model.RelatedFilePath" target="_blank">იხილეთ დაკავშრებული ფაილი</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr />
+            <hr />
         }
         <div class="row row-details">
             <div class="form-group">
@@ -128,9 +129,18 @@
             <hr />
             @if (!isCompleted)
             {
-                <a id="assign-hit" class="btn btn-primary btn-lg btn-block" href="@Url.Action("Work", "Worker", new { hitID = Model.HITID })">
-                    შესრულება
-                </a>
+                if (isMaxedOut)
+                {
+                    <p class="text-center text-success">
+                        დავალების მაქსიმალური შემსრულებლების რაოდენობა მიღწეულია
+                    </p>
+                }
+                else
+                {
+                    <a id="assign-hit" class="btn btn-primary btn-lg btn-block" href="@Url.Action("Work", "Worker", new { hitID = Model.HITID })">
+                        შესრულება
+                    </a>
+                }
             }
             else
             {

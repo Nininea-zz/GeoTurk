@@ -91,6 +91,11 @@ namespace GeoTurk.Controllers
                 ViewBag.IsCompleted = userHit.CompleteDate.HasValue;
             }
 
+            if (hit.WorkerHITs.Count >= hit.WorkersCount)
+            {
+                ViewBag.MaxWorkers = true;
+            }
+
             return View(hit);
         }
 
@@ -109,6 +114,11 @@ namespace GeoTurk.Controllers
             {
                 return RedirectToAction("Find", "Worker");
             }
+            
+            if (hit.WorkerHITs.Count >= hit.WorkersCount)
+            {
+                return RedirectToAction("ViewHit", "Worker", new { hitID = hitID });
+            }
 
             var userHit = await DB.WorkerHITs.FirstOrDefaultAsync(x => x.WorkerID == userID && x.HITID == hitID);
             if (userHit == null)
@@ -122,13 +132,19 @@ namespace GeoTurk.Controllers
                 };
 
                 hit.WorkerHITs.Add(userHit);
+
+                if (hit.WorkerHITs.Count == hit.WorkersCount)
+                {
+                    hit.IsMaxedOut = true;
+                }
+
                 await DB.SaveChangesAsync();
             }
             else
             {
                 if (userHit.CompleteDate.HasValue)
                 {
-                    return RedirectToAction("Hits", "Worker");
+                    return RedirectToAction("ViewHit", "Worker", new { hitID = hitID });
                 }
             }
 
@@ -205,6 +221,11 @@ namespace GeoTurk.Controllers
             }
             
             userHit.CompleteDate = DateTime.Now;
+
+            if (hit.IsMaxedOut && hit.WorkerHITs.All(x => x.CompleteDate.HasValue))
+            {
+                hit.IsCompleted = true;
+            }
 
             await DB.SaveChangesAsync();
 

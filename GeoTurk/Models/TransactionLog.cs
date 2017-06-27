@@ -18,5 +18,7 @@ namespace GeoTurk.Models
         public Enums.TransactionType Type { get; set; }
 
         public decimal Amount { get; set; }
+
+        public DateTime CreateDate { get; set; }
     }
 }

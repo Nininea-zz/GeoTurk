@@ -7,7 +7,9 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href="@Url.Action("UserTransactions", "Account")">ბალანსი: <span id="user-balance"></span></a>
+                <a href="@Url.Action("UserTransactions", "Account")" style="min-width: 10em;">
+                    ბალანსი: <span id="user-balance"></span>
+                </a>
             </li>
             <li>
                 @Html.ActionLink("გამარჯობა " + User.Identity.GetUserName() + "!", "ProfileInfo", "Account")
@@ -15,7 +17,7 @@
             <li><a href="javascript:document.getElementById('logoutForm').submit()">გამოსვლა</a></li>
         </ul>
     }
-}   
+}
 else
 {
     <ul class="nav navbar-nav navbar-right">

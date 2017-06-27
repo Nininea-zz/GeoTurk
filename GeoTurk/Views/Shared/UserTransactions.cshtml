@@ -1,0 +1,69 @@
+﻿@using GeoTurk.Helpers;
+
+@model List<GeoTurk.Models.TransactionLog>
+
+@{
+    ViewBag.Title = "ანგარიშის ამონაწერი";
+}
+
+<div class="row" style="text-align:center;">
+    <h3>
+        <b>
+            @ViewBag.Title
+        </b>
+    </h3>
+</div>
+<br />
+
+<table class="table table-striped" style="width: 100%">
+    <thead>
+        <tr>
+            <th>
+                თარიღი
+            </th>
+            <th>
+                დავალების დასახელება
+            </th>
+            <th>
+                მიზეზი
+            </th>
+            <th>
+                რაოდენობა
+            </th>
+            <th>
+                ტიპი
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            var description = string.Empty;
+            switch (transaction.Type)
+            {
+                case GeoTurk.Enums.TransactionType.Fee:
+                    description = "საკომისიო";
+                    break;
+                case GeoTurk.Enums.TransactionType.HITCost:
+                    description = "დავალების ღირებულება";
+                    break;
+            }
+
+            var type = "შემოსავალი";
+            var amount = transaction.Amount;
+            if (amount < 0)
+            {
+                amount *= -1;
+                type = "გასავალი";
+            }
+
+            <tr>
+                <td>@transaction.CreateDate.ToGeorgianDateTime()</td>
+                <td>@transaction.HIT.Title</td>
+                <td>@description</td>
+                <td>@amount ლარი</td>
+                <td>@type</td>
+            </tr>
+        }
+    </tbody>
+</table>

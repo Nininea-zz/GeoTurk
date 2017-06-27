@@ -264,10 +264,19 @@
     <Compile Include="Migrations\201706261759596_init-database-011.Designer.cs">
       <DependentUpon>201706261759596_init-database-011.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706271344224_init-database-012.cs" />
+    <Compile Include="Migrations\201706271344224_init-database-012.Designer.cs">
+      <DependentUpon>201706271344224_init-database-012.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706271428279_init-database-013.cs" />
+    <Compile Include="Migrations\201706271428279_init-database-013.Designer.cs">
+      <DependentUpon>201706271428279_init-database-013.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GeoTurkDbContext.cs" />
     <Compile Include="Models\HITAnswer.cs" />
+    <Compile Include="Models\RequesterPageViewModel.cs" />
     <Compile Include="Models\TransactionLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Tag.cs" />
@@ -368,6 +377,7 @@
     <Content Include="Views\Shared\ViewHIT.cshtml" />
     <Content Include="Views\Worker\Work.cshtml" />
     <Content Include="Views\Requester\ViewHitAnswers.cshtml" />
+    <Content Include="Views\Shared\UserTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -416,6 +426,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706261759596_init-database-011.resx">
       <DependentUpon>201706261759596_init-database-011.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706271344224_init-database-012.resx">
+      <DependentUpon>201706271344224_init-database-012.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706271428279_init-database-013.resx">
+      <DependentUpon>201706271428279_init-database-013.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

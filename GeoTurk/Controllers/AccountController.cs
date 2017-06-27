@@ -314,6 +314,26 @@ namespace GeoTurk.Controllers
             return RedirectToAction("login", "Account");
         }
 
+        [Authorize]
+        public async Task<ActionResult> UserTransactions()
+        {
+            var userID = User.Identity.GetUserId<int>();
+            if (userID == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = await DB.Users.FirstOrDefaultAsync(x => x.Id == userID);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var transactions = await DB.TransactionLogs.Where(t => t.UserID == user.Id).ToListAsync();
+
+            return View(transactions);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> GetUserBalance()

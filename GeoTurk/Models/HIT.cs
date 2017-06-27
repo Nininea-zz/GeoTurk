@@ -104,12 +104,17 @@ namespace GeoTurk.Models
         public decimal Cost { get; set; } = 0;
 
         [DisplayName("თაგები")]
-        [MaxLength(int.MaxValue, ErrorMessage = "თაგები არ შეიძლება იყოს 2 000 000 სიმბოლოზე მეტი")]
+        [MaxLength(int.MaxValue, ErrorMessage = "თაგები არ შეიძლება იყოს 2 000 000 000 სიმბოლოზე მეტი")]
         public string Tags { get; set; }
 
         // შემკვეთი მომხმარებელი
         public int CreatorID { get; set; }
         public virtual User Creator { get; set; }
-        
+
+        public bool IsCompleted { get; set; }
+
+        public bool IsMaxedOut { get; set; }
+
+        public DateTime CreateDate { get; set; }
     }
 }
